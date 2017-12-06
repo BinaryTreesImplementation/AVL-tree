@@ -26,7 +26,7 @@ TEST_CASE("insert2", "[rotate_right]")
    tree.insert(10);
    tree.insert(9);
    tree.insert(8);
-   Node<T> * node = tree.search(9);
+   Node<int> * node = tree.search(9);
    REQUIRE(tree.getLeft(9) == tree.search(8));
    REQUIRE(tree.getRight(9) == tree.search(10));
    REQUIRE(tree.getParent(9) == nullptr);
