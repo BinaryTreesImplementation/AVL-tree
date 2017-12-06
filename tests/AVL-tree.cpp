@@ -7,12 +7,11 @@ TEST_CASE("insert1", "[root]")
 {
    AVL_tree<int> tree;
    tree.insert(10);
-   Node<int> * node = tree.search(10);
-   REQUIRE(tree.getLeft(node) == nullptr);
-   REQUIRE(tree.getRight(node) == nullptr);
-   REQUIRE(tree.getParent(node) == nullptr);
-   REQUIRE(tree.getRoot() == node);
-   REQUIRE(tree.height_(node) == 1);
+   REQUIRE(tree.getLeft(10) == nullptr);
+   REQUIRE(tree.getRight(10) == nullptr);
+   REQUIRE(tree.getParent(10) == nullptr);
+   REQUIRE(tree.getRoot() == tree.search(10));
+   REQUIRE(tree.height_(tree.search(10)) == 1);
    REQUIRE(tree.count_() == 1);
 }
 
@@ -27,14 +26,14 @@ TEST_CASE("insert2", "[rotate_right]")
    tree.insert(10);
    tree.insert(9);
    tree.insert(8);
-   Node<int> * node = tree.search(9);
-   REQUIRE(tree.getLeft(node) == tree.search(8));
-   REQUIRE(tree.getRight(node) == tree.search(10));
-   REQUIRE(tree.getParent(node) == nullptr);
+   Node<T> * node = tree.search(9);
+   REQUIRE(tree.getLeft(9) == tree.search(8));
+   REQUIRE(tree.getRight(9) == tree.search(10));
+   REQUIRE(tree.getParent(9) == nullptr);
    REQUIRE(tree.getRoot() == node);
    REQUIRE(tree.height_(node) == 2);
-   REQUIRE(tree.getParent(tree.search(8)) == node);
-   REQUIRE(tree.getParent(tree.search(10)) == node);
+   REQUIRE(tree.getParent(8) == node);
+   REQUIRE(tree.getParent(10) == node);
    REQUIRE(tree.height_(tree.search(8)) == 1);
    REQUIRE(tree.height_(tree.search(10)) == 1);
    REQUIRE(tree.count_() == 3);
@@ -51,14 +50,13 @@ TEST_CASE("insert3", "[rotate_left]")
    tree.insert(8);
    tree.insert(9);
    tree.insert(10);
-   Node<int> * node = tree.search(9);
-   REQUIRE(tree.getLeft(node) == tree.search(8));
-   REQUIRE(tree.getRight(node) == tree.search(10));
-   REQUIRE(tree.getParent(node) == nullptr);
+   REQUIRE(tree.getLeft(9) == tree.search(8));
+   REQUIRE(tree.getRight(9) == tree.search(10));
+   REQUIRE(tree.getParent(9) == nullptr);
    REQUIRE(tree.getRoot() == tree.search(9));
-   REQUIRE(tree.height_(node) == 2);
-   REQUIRE(tree.getParent(tree.search(8)) == node);
-   REQUIRE(tree.getParent(tree.search(10)) == node);
+   REQUIRE(tree.height_(tree.search(9)) == 2);
+   REQUIRE(tree.getParent(8) == node);
+   REQUIRE(tree.getParent(10) == node);
    REQUIRE(tree.height_(tree.search(8)) == 1);
    REQUIRE(tree.height_(tree.search(10)) == 1);
    REQUIRE(tree.count_() == 3);
@@ -78,7 +76,7 @@ TEST_CASE("remove1", "[leaf]")
    REQUIRE(tree.getRoot() == tree.search(9));
    REQUIRE(tree.height_(tree.search(8)) == 1);
    REQUIRE(tree.height_(tree.search(9)) == 2);
-   REQUIRE(tree.getRight(tree.search(9)) == nullptr);
+   REQUIRE(tree.getRight(9) == nullptr);
    REQUIRE(tree.search(10) == nullptr);
    REQUIRE(tree.count_() == 2);
 }
@@ -105,7 +103,7 @@ TEST_CASE("remove2", "[node->left, !node->right]")
    REQUIRE(tree.height_(tree.search(7)) == 1);
    REQUIRE(tree.height_(tree.search(10)) == 1);
    REQUIRE(tree.height_(tree.search(9)) == 2);
-   REQUIRE(tree.getLeft(tree.search(9)) == tree.search(7));
+   REQUIRE(tree.getLeft(9) == tree.search(7));
    REQUIRE(tree.search(8) == nullptr);
    REQUIRE(tree.count_() == 3);
 }
@@ -124,9 +122,9 @@ TEST_CASE("remove3", "[node->right]")
    REQUIRE(tree.getRoot() == tree.search(10));
    REQUIRE(tree.height_(tree.search(8)) == 1);
    REQUIRE(tree.height_(tree.search(10)) == 2);
-   REQUIRE(tree.getLeft(tree.search(10)) == tree.search(8));
-   REQUIRE(tree.getRight(tree.search(10)) == nullptr);
-   REQUIRE(tree.getParent(tree.search(10)) == nullptr);
+   REQUIRE(tree.getLeft(10) == tree.search(8));
+   REQUIRE(tree.getRight(10) == nullptr);
+   REQUIRE(tree.getParent(10) == nullptr);
    REQUIRE(tree.search(9) == nullptr);
    REQUIRE(tree.count_() == 2);
 }
