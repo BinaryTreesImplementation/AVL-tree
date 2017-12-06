@@ -50,21 +50,30 @@ public:
 	
 	unsigned int height_(Node<T> * node);
 	
-	Node<T> * left_(Node<T> * node)
+	Node<T> * getLeft(T key)
 	{
-		return node->left;
+		Node<T> * node = search(key);
+		if (node)
+			return node->left;
+		return nullptr;
 	}
-	Node<T> * right_(Node<T> * node)
+	Node<T> * getRight(T key)
 	{
-		return node->right;
+		Node<T> * node = search(key);
+		if (node)
+			return node->right;
+		return nullptr;
 	}
-	Node<T> * parent_(Node<T> * node)
+	Node<T> * getParent(T key)
 	{
-		return node->parent;
+		Node<T> * node = search(key);
+		if (node)
+			return node->parent;
+		return nullptr;
 	}
-	T key_(Node<T> * node)
+	T getRoot()
 	{
-		return node->key;
+		return root;
 	}
 	unsigned int count_()
 	{
