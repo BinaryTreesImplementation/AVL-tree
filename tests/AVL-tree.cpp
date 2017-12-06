@@ -55,8 +55,8 @@ TEST_CASE("insert3", "[rotate_left]")
    REQUIRE(tree.getParent(9) == nullptr);
    REQUIRE(tree.getRoot() == tree.search(9));
    REQUIRE(tree.height_(tree.search(9)) == 2);
-   REQUIRE(tree.getParent(8) == node);
-   REQUIRE(tree.getParent(10) == node);
+   REQUIRE(tree.getParent(8) == tree.search(9));
+   REQUIRE(tree.getParent(10) == tree.search(9));
    REQUIRE(tree.height_(tree.search(8)) == 1);
    REQUIRE(tree.height_(tree.search(10)) == 1);
    REQUIRE(tree.count_() == 3);
