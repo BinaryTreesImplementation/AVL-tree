@@ -71,7 +71,7 @@ public:
 			return node->parent;
 		return nullptr;
 	}
-	T getRoot()
+	Node<T> * getRoot()
 	{
 		return root;
 	}
