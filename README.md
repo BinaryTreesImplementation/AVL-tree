@@ -1,9 +1,14 @@
 [![Build Status](https://travis-ci.org/BinaryTreesImplementation/AVL-tree.svg?branch=master)](https://travis-ci.org/BinaryTreesImplementation/AVL-tree) 
 
-TEST
-```
-cmake -H. -B_builds -DBUILD_TESTS=ON -DBUILD_EXAMPLES=ON
-cmake --build _builds
-cmake --build _builds --target test -- ARGS=--verbose
-_builds/example
-```
+# AVL-tree
+---
+## Краткое описание
+AVL-tree — сбалансированное по высоте двоичное дерево поиска: для каждой его вершины высота её двух поддеревьев различается не более чем на 1. Высота АВЛ-дерева никогда не превысит высоту идеально сбалансированного дерева более, чем на 45%.
+
+## Реализация
+Данное бинарное дерево поиска реализовано на языке программирования С++. 
+
+Методы доступные для использования: 
++ Insert
++ Delete
++ Search
