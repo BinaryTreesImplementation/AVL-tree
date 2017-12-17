@@ -2,11 +2,16 @@ cmake_minimum_required(VERSION 3.8)
 
 include("cmake/HunterGate.cmake")
 HunterGate(
-    URL "https://github.com/ruslo/hunter/archive/v0.19.123.tar.gz"
-    SHA1 "57d07480686f82ddc916a5980b4f2a18e5954c2b"
+    URL "https://github.com/BinaryTreesImplementation/hunter/archive/v0.141.1.tar.gz"
+    SHA1 "8238708ef68f34a6cbba00896ca677ee6a00a5ab"
 )
 
 project(AVL-tree)
+set(AVL-TREE_VERSION_MAJOR 0)
+set(AVL-TREE_VERSION_MINOR 1)
+set(AVL-TREE_VERSION_PATCH 0)
+set(AVL-TREE_VERSION_TWEAK 0)
+set(AVL-TREE_VERSION ${AVL-TREE_VERSION_MAJOR}.${AVL-TREE_VERSION_MINOR}.${AVL-TREE_VERSION_PATCH}.${AVL-TREE_VERSION_TWEAK})
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
@@ -14,9 +19,10 @@ option(BUILD_TESTS "Build tests" OFF)
 option(BUILD_EXAMPLES "Build Examples" OFF)
 
 add_library(${PROJECT_NAME} INTERFACE)
-target_sources(${PROJECT_NAME} INTERFACE "${PROJECT_SOURCE_DIR}/include/AVL-tree.hpp")
-
-target_include_directories(${PROJECT_NAME} INTERFACE "${PROJECT_SOURCE_DIR}/include")
+target_include_directories(${PROJECT_NAME} INTERFACE 
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>  
+    $<INSTALL_INTERFACE:include>
+)
 
 if(BUILD_TESTS)
   hunter_add_package(Catch)
