@@ -85,7 +85,7 @@ TEST_CASE("delete1", "[leaf]")
        8     10         7     10    
       /                          
      7                            */
-TEST_CASE("delete2", "[!node->right]") 
+TEST_CASE("delete2") 
 {
    AVL_tree<int> tree;
    tree.insert(8);
