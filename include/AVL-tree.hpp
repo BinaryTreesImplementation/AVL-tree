@@ -265,4 +265,9 @@ public:
 	{
 		return root_;
 	}
+	
+	size_t count()
+	{
+		return root_->count();
+	}
 };
