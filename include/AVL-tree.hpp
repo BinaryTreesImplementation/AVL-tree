@@ -154,7 +154,7 @@ private:
 			else if (key == node->key_)
 			{
 				Node* parent = node->parent_;
-				if (node == root_)
+				if (node == root_ && !node->left_ && !node->right_)
 					delete node;
 				else if (!node->right_)
 				{
