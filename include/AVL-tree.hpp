@@ -155,58 +155,34 @@ private:
 			else if (key == node->key_)
 			{
 				Node* parent = node->parent_;
-				if (!node->left_ && !node->right_)
+				if (node == root_)
+					delete node;
+				else if (!node->right_)
 				{
-					if (node != root_ && node->parent_->left_ == node)
-					{
-						delete node;
-						parent->left_ = nullptr;
-						do
-						{
-							balance_(parent);
-							parent = parent->parent_;
-						} while (parent);
-					}
-					else
-					{
-						if (node == root_)
-						{
-							delete node;
-							return;
-						}
-						delete node;
-						parent->right_ = nullptr;
-						do
-						{
-							balance_(parent);
-							parent = parent->parent_;
-						} while (parent);
-					}
-				}
-
-				else if (node->left_ && !node->right_)
-				{
+					Node * left = node->left_;
 					if (node->parent_->left_ == node)
 					{
-						node->parent_->left_ = node->left_;
-						node->left_->parent_ = parent;
 						delete node;
-						while (parent)
+						parent->left_ = left;
+						if (parent->left_)
+							left->parent_ = parent;
+						do
 						{
 							balance_(parent);
 							parent = parent->parent_;
-						}
+						} while (parent);
 					}
 					else
 					{
-						node->parent_->right_ = node->left_;
-						node->left_->parent_ = node->parent_;
 						delete node;
-						while (parent)
+						parent->right_ = left;
+						if (parent->right_)
+							left->parent_ = parent;
+						do
 						{
 							balance_(parent);
 							parent = parent->parent_;
-						}
+						} while (parent);
 					}
 				}
 				else if (node->right_)
@@ -234,7 +210,7 @@ private:
 	std::ostream & print_(Node* node, std::ostream & stream, size_t level)const
 	{
 		Node* cur = node;
-		if (cur != nullptr)
+		if (cur != nullptr && count_ != 0)
 		{
 			print_(cur->right_, stream, level + 1);
 			for (unsigned int i = 0; i < level; ++i)
