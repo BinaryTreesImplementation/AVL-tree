@@ -12,7 +12,7 @@ TEST_CASE("insert1", "[root]")
    REQUIRE(tree.parent(10) == nullptr);
    REQUIRE(tree.root() == tree.search(10));
    REQUIRE(tree.height(tree.search(10)) == 1);
-   REQUIRE(tree.count() == 1);
+   REQUIRE(count_ == 1);
 }
 
 /*        10             9
@@ -35,7 +35,7 @@ TEST_CASE("insert2", "[rotate_right]")
    REQUIRE(tree.parent(10) == tree.search(9));
    REQUIRE(tree.height(tree.search(8)) == 1);
    REQUIRE(tree.height(tree.search(10)) == 1);
-   REQUIRE(tree.count() == 3);
+   REQUIRE(count_ == 3);
 }
 
 /*  8                        9
@@ -58,7 +58,7 @@ TEST_CASE("insert3", "[rotate_left]")
    REQUIRE(tree.parent(10) == tree.search(9));
    REQUIRE(tree.height(tree.search(8)) == 1);
    REQUIRE(tree.height(tree.search(10)) == 1);
-   REQUIRE(tree.count() == 3);
+   REQUIRE(count_ == 3);
 }
 
 /*        9                9
@@ -77,7 +77,7 @@ TEST_CASE("delete1", "[leaf]")
    REQUIRE(tree.height(tree.search(9)) == 2);
    REQUIRE(tree.right(9) == nullptr);
    REQUIRE(tree.search(10) == nullptr);
-   REQUIRE(tree.count() == 2);
+   REQUIRE(count_ == 2);
 }
 
 /*        9                9
@@ -104,7 +104,7 @@ TEST_CASE("delete2", "[node->left, !node->right]")
    REQUIRE(tree.height(tree.search(9)) == 2);
    REQUIRE(tree.left(9) == tree.search(7));
    REQUIRE(tree.search(8) == nullptr);
-   REQUIRE(tree.count() == 3);
+   REQUIRE(count_ == 3);
 }
 
 /*        9                10
@@ -125,5 +125,5 @@ TEST_CASE("delete3", "[node->right]")
    REQUIRE(tree.right(10) == nullptr);
    REQUIRE(tree.parent(10) == nullptr);
    REQUIRE(tree.search(9) == nullptr);
-   REQUIRE(tree.count() == 2);
+   REQUIRE(count_ == 2);
 }
