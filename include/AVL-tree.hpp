@@ -24,7 +24,6 @@ private:
 		}
 		~Node()
 		{ 
-			height_ = 1;
 			count_--; 
 		}
 	}*root_;
