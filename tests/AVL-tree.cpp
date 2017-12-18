@@ -76,7 +76,6 @@ TEST_CASE("delete1", "[leaf]")
    REQUIRE(tree.height(tree.search(8)) == 1);
    REQUIRE(tree.height(tree.search(9)) == 2);
    REQUIRE(tree.right(9) == nullptr);
-   REQUIRE(tree.search(10) == nullptr);
    REQUIRE(count_ == 2);
 }
 
@@ -103,7 +102,6 @@ TEST_CASE("delete2")
    REQUIRE(tree.height(tree.search(10)) == 1);
    REQUIRE(tree.height(tree.search(9)) == 2);
    REQUIRE(tree.left(9) == tree.search(7));
-   REQUIRE(tree.search(8) == nullptr);
    REQUIRE(count_ == 3);
 }
 
@@ -124,6 +122,5 @@ TEST_CASE("delete3", "[node->right]")
    REQUIRE(tree.left(10) == tree.search(8));
    REQUIRE(tree.right(10) == nullptr);
    REQUIRE(tree.parent(10) == nullptr);
-   REQUIRE(tree.search(9) == nullptr);
    REQUIRE(count_ == 2);
 }
