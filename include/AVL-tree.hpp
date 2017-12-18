@@ -11,7 +11,7 @@ protected:
 public: 
 	Counter() { ++count_(); }
 	~Counter() { --count_(); }
-}
+};
 
 template<typename T>
 class AVL_tree
