@@ -70,7 +70,7 @@ TEST_CASE("delete1", "[leaf]")
    tree.insert(8);
    tree.insert(9);
    tree.insert(10);
-   REQUIRE(count_ == 3);
+   REQUIRE(tree.count() == 3);
    tree.deleteElement(10);
    REQUIRE(tree.root() == tree.search(9));
    REQUIRE(tree.height(tree.search(8)) == 1);
