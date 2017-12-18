@@ -1,31 +1,31 @@
 #include<iostream>
 
-unsigned int count_ = 0;
+class Counter
+{
+protected:
+	size_t & count_() 
+	{ 
+		static size_t counter = 0; 
+		return counter; 
+	}
+public: 
+	Counter() { ++count_(); }
+	~Counter() { --count_(); }
+}
 
 template<typename T>
 class AVL_tree
 {
 private:
-	struct Node
+	struct Node: public Counter 
 	{
 		Node* left_;
 		Node* right_;
 		Node* parent_;
 		T key_;
 		unsigned int height_;
-		Node(T const& key, Node* parent)
-		{
-			left_ = nullptr;
-			right_ = nullptr;
-			parent_ = parent;
-			key_ = key;
-			height_ = 1;
-			count_++;
-		}
-		~Node()
-		{ 
-			count_--; 
-		}
+		Node(T const& key, Node* parent) : left_ { nullptr }, right_ { nullptr }, parent_ { parent }, key_ { key }, height_ { 1 } {}
+		size_t count() { return count_(); }
 	}*root_;
 
 	void deleteNode_(Node* node)
@@ -115,14 +115,13 @@ private:
 		{
 			parent = cur;
 			if (key == cur->key_)
-				throw std::logic_error("There is this element in the tree\n");
+				return;
 			if (key < cur->key_)
 				cur = cur->left_;
 			else //if (key > node->key)
 				cur = cur->right_;
 		}
 		cur = new Node(key, parent);
-		//count_++;
 		if (cur->parent_ == nullptr)
 			root_ = cur;
 		else
@@ -199,26 +198,6 @@ private:
 			}
 		}
 	}
-
-	std::ostream & print_(std::ostream & stream)
-	{
-		print_(root_, stream, 0);
-		return stream;
-	}
-
-	std::ostream & print_(Node* node, std::ostream & stream, size_t level)const
-	{
-		Node* cur = node;
-		if (cur != nullptr && count_ != 0)
-		{
-			print_(cur->right_, stream, level + 1);
-			for (unsigned int i = 0; i < level; ++i)
-				stream << '-';
-			stream << cur->key_ << " " << cur->height_ << std::endl;
-			print_(cur->left_, stream, level + 1);
-		}
-		return stream;
-	}
 public:
 	AVL_tree() : root_{ nullptr }{};
 
@@ -249,11 +228,6 @@ public:
 			}
 		}
 		return cur;
-	}
-
-	friend std::ostream & operator << (std::ostream&stream, AVL_tree<T> & tree)
-	{
-		return tree.print_(std::cout);
 	}
 
 	unsigned int height(Node* node)
