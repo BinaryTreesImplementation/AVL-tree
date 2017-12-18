@@ -1,20 +1,33 @@
 #include<iostream>
 
+unsigned int count_ = 0;
+
 template<typename T>
 class AVL_tree
 {
 private:
 	struct Node
 	{
-	Node* left_;
-	Node* right_;
-	Node* parent_;
-	T key_;
-	unsigned int height_;
-	Node(T const& key) : left_{ nullptr }, right_{ nullptr }, parent_{ nullptr }, key_{ key }, height_{ 1 } {};
-	Node(T const& key, Node* parent_) : left_{ nullptr }, right_{ nullptr }, parent_{ parent_ }, key_{ key }, height_{ 1 } {};
+		Node* left_;
+		Node* right_;
+		Node* parent_;
+		T key_;
+		unsigned int height_;
+		Node(T const& key, Node* parent)
+		{
+			left_ = nullptr;
+			right_ = nullptr;
+			parent_ = parent;
+			key_ = key;
+			height_ = 1;
+			count_++;
+		}
+		~Node()
+		{ 
+			height_ = 1;
+			count_--; 
+		}
 	}*root_;
-	unsigned int count_;
 
 	void deleteNode_(Node* node)
 	{
@@ -28,7 +41,7 @@ private:
 	{
 		return height(node->right_) - height(node->left_);
 	}
-	
+
 	void fixHeight_(Node* node)
 	{
 		unsigned int leftHeight = height(node->left_);
@@ -56,7 +69,7 @@ private:
 		fixHeight_(node);
 		fixHeight_(right);
 	}
-	
+
 	void rotateRight_(Node* node)
 	{
 		Node* left = node->left_;
@@ -110,7 +123,7 @@ private:
 				cur = cur->right_;
 		}
 		cur = new Node(key, parent);
-		count_++;
+		//count_++;
 		if (cur->parent_ == nullptr)
 			root_ = cur;
 		else
@@ -130,8 +143,7 @@ private:
 	{
 		return node->left_ ? findMin_(node->left_) : node;
 	}
-	
-	Node* deleteMin_(Node* node);
+
 	void deleteElement_(Node* & node, const T& key)
 	{
 		if (node)
@@ -145,11 +157,10 @@ private:
 				Node* parent = node->parent_;
 				if (!node->left_ && !node->right_)
 				{
-					count_--;
-					if (node->parent_->left_ == node)
+					if (node != root_ && node->parent_->left_ == node)
 					{
-						node->parent_->left_ = nullptr;
-						//node->parent_->height_ = 1;
+						delete node;
+						parent->left_ = nullptr;
 						do
 						{
 							balance_(parent);
@@ -158,8 +169,13 @@ private:
 					}
 					else
 					{
-						node->parent_->right_ = nullptr;
-						//node->parent_->height_ = 1;
+						if (node == root_)
+						{
+							delete node;
+							return;
+						}
+						delete node;
+						parent->right_ = nullptr;
 						do
 						{
 							balance_(parent);
@@ -170,12 +186,11 @@ private:
 
 				else if (node->left_ && !node->right_)
 				{
-					count_--;
 					if (node->parent_->left_ == node)
 					{
-						Node* parent_ = node->parent_;
 						node->parent_->left_ = node->left_;
-						node->parent_ = parent_;
+						node->left_->parent_ = parent;
+						delete node;
 						while (parent)
 						{
 							balance_(parent);
@@ -186,6 +201,7 @@ private:
 					{
 						node->parent_->right_ = node->left_;
 						node->left_->parent_ = node->parent_;
+						delete node;
 						while (parent)
 						{
 							balance_(parent);
@@ -206,7 +222,6 @@ private:
 					}
 				}
 			}
-			else throw std::logic_error("Element isn't find/n");
 		}
 	}
 
@@ -215,7 +230,7 @@ private:
 		print_(root_, stream, 0);
 		return stream;
 	}
-	
+
 	std::ostream & print_(Node* node, std::ostream & stream, size_t level)const
 	{
 		Node* cur = node;
@@ -230,7 +245,7 @@ private:
 		return stream;
 	}
 public:
-	AVL_tree() : root_{ nullptr }, count_{ 0 } {};
+	AVL_tree() : root_{ nullptr }{};
 
 	~AVL_tree() { deleteNode_(root_); }
 
@@ -280,7 +295,7 @@ public:
 			return node->left_;
 		return nullptr;
 	}
-	
+
 	Node* right(T key_)
 	{
 		Node* node = search(key_);
@@ -288,7 +303,7 @@ public:
 			return node->right_;
 		return nullptr;
 	}
-	
+
 	Node* parent(T key_)
 	{
 		Node* node = search(key_);
@@ -296,14 +311,9 @@ public:
 			return node->parent_;
 		return nullptr;
 	}
-	
+
 	Node* root()
 	{
 		return root_;
-	}
-	
-	unsigned int count()
-	{
-		return count_;
 	}
 };
