@@ -26,14 +26,13 @@ TEST_CASE("insert2", "[rotate_right]")
    tree.insert(10);
    tree.insert(9);
    tree.insert(8);
-   Node<int> * node = tree.search(9);
    REQUIRE(tree.left(9) == tree.search(8));
    REQUIRE(tree.right(9) == tree.search(10));
    REQUIRE(tree.parent(9) == nullptr);
-   REQUIRE(tree.root() == node);
-   REQUIRE(tree.height(node) == 2);
-   REQUIRE(tree.parent(8) == node);
-   REQUIRE(tree.parent(10) == node);
+   REQUIRE(tree.root() == tree.search(9));
+   REQUIRE(tree.height(tree.search(9)) == 2);
+   REQUIRE(tree.parent(8) == tree.search(9));
+   REQUIRE(tree.parent(10) == tree.search(9));
    REQUIRE(tree.height(tree.search(8)) == 1);
    REQUIRE(tree.height(tree.search(10)) == 1);
    REQUIRE(tree.count() == 3);
