@@ -13,7 +13,7 @@ private:
 		T key_;
 		unsigned int height_;
 		Node(T const& key, Node* parent) : left_ { nullptr }, right_ { nullptr }, parent_ { parent }, key_ { key }, height_ { 1 } {}
-		size_t count() { return count_(); }
+		size_t count() { return Count(); }
 	}*root_;
 
 	void deleteNode_(Node* node)
