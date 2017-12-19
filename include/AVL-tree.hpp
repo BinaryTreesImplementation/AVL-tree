@@ -1,17 +1,16 @@
 #include<iostream>
 
+#ifndef Counter
 class Counter
 {
 protected:
-	size_t & count_() 
-	{ 
-		static size_t counter = 0; 
-		return counter; 
-	}
-public: 
-	Counter() { ++count_(); }
-	~Counter() { --count_(); }
+	size_t& Count() { static size_t counter = 0; return counter; }
+
+public:
+	Counter() { ++Count(); }
+	~Counter() { --Count(); }
 };
+#endif
 
 template<typename T>
 class AVL_tree
