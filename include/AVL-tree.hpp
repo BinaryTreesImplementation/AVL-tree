@@ -1,19 +1,37 @@
 #include<iostream>
 #include "Counter.hpp"
 
+
+class Counter
+{
+protected:
+	size_t& Count() { static size_t counter = 0; return counter; }
+
+public:
+	Counter() { ++Count(); }
+	~Counter() { --Count(); }
+
+
+
+};
+
 template<typename T>
 class AVL_tree
 {
 private:
-	struct Node: public Counter 
+	struct Node : public Counter
 	{
 		Node* left_;
 		Node* right_;
 		Node* parent_;
 		T key_;
 		unsigned int height_;
-		Node(T const& key, Node* parent) : left_ { nullptr }, right_ { nullptr }, parent_ { parent }, key_ { key }, height_ { 1 } {}
-		size_t count() { return Count(); }
+		Node(T const& key, Node* parent) : left_(nullptr), right_(nullptr), parent_(parent), key_(key), height_(1) { };
+		~Node() {  }
+		size_t getCount()
+		{
+			return Count();
+		}
 	}*root_;
 
 	void deleteNode_(Node* node)
@@ -103,13 +121,14 @@ private:
 		{
 			parent = cur;
 			if (key == cur->key_)
-				return;
+				throw std::logic_error("There is this element in the tree\n");
 			if (key < cur->key_)
 				cur = cur->left_;
 			else //if (key > node->key)
 				cur = cur->right_;
 		}
 		cur = new Node(key, parent);
+		//count_++;
 		if (cur->parent_ == nullptr)
 			root_ = cur;
 		else
@@ -130,64 +149,30 @@ private:
 		return node->left_ ? findMin_(node->left_) : node;
 	}
 
-	void deleteElement_(Node* & node, const T& key)
+
+
+
+	std::ostream & print_(std::ostream & stream)
 	{
-		if (node)
+		print_(root_, stream, 0);
+		return stream;
+	}
+
+	std::ostream & print_(Node* node, std::ostream & stream, size_t level)const
+	{
+		Node* cur = node;
+		if (cur != nullptr)
 		{
-			if (key < node->key_)
-				deleteElement_(node->left_, key);
-			else if (key > node->key_)
-				deleteElement_(node->right_, key);
-			else if (key == node->key_)
-			{
-				Node* parent = node->parent_;
-				if (node == root_ && !node->left_ && !node->right_)
-					delete node;
-				else if (!node->right_)
-				{
-					Node * left = node->left_;
-					if (node->parent_->left_ == node)
-					{
-						delete node;
-						parent->left_ = left;
-						if (parent->left_)
-							left->parent_ = parent;
-						do
-						{
-							balance_(parent);
-							parent = parent->parent_;
-						} while (parent);
-					}
-					else
-					{
-						delete node;
-						parent->right_ = left;
-						if (parent->right_)
-							left->parent_ = parent;
-						do
-						{
-							balance_(parent);
-							parent = parent->parent_;
-						} while (parent);
-					}
-				}
-				else if (node->right_)
-				{
-					Node* min = findMin_(node->right_);
-					T minKey = min->key_;
-					deleteElement(min->key_);
-					node->key_ = minKey;
-					while (parent)
-					{
-						balance_(parent);
-						parent = parent->parent_;
-					}
-				}
-			}
+			print_(cur->right_, stream, level + 1);
+			for (unsigned int i = 0; i < level; ++i)
+				stream << '-';
+			stream << cur->key_ << " " << cur->height_ << std::endl;
+			print_(cur->left_, stream, level + 1);
 		}
+		return stream;
 	}
 public:
-	AVL_tree() : root_{ nullptr }{};
+	AVL_tree() : root_{ nullptr } {};
 
 	~AVL_tree() { deleteNode_(root_); }
 
@@ -198,7 +183,68 @@ public:
 
 	void deleteElement(const T& key)
 	{
-		deleteElement_(root_, key);
+		Node *removing = search(key);
+		if (removing)
+		{
+			Node* parent = removing->parent_;
+			if (!removing->left_ && !removing->right_)
+			{
+				if (removing != root_)
+				{
+					if (removing->parent_->left_ == removing)
+					{
+						removing->parent_->left_ = nullptr;
+					}
+					else
+					{
+						removing->parent_->right_ = nullptr;
+					}
+					do
+					{
+						balance_(parent);
+						parent = parent->parent_;
+					} while (parent);
+				}
+				else
+				{
+					root_ = nullptr;
+				}
+				delete removing;
+				return;
+			}
+			else if (removing->left_ && !removing->right_)
+			{
+				if (removing->parent_->left_ == removing)
+				{
+					removing->parent_->left_ = removing->left_;
+					removing->left_->parent_ = parent;
+				}
+				else
+				{
+					removing->parent_->right_ = removing->left_;
+					removing->left_->parent_ = removing->parent_;
+				}
+				while (parent)
+				{
+					balance_(parent);
+					parent = parent->parent_;
+				}
+				delete removing;
+				return;
+			}
+			else if (removing->right_)
+			{
+				Node* min = findMin_(removing->right_);
+				T minKey = min->key_;
+				deleteElement(min->key_);
+				removing->key_ = minKey;
+				while (parent)
+				{
+					balance_(parent);
+					parent = parent->parent_;
+				}
+			}
+		}
 	}
 
 	Node* search(const T& key)const
@@ -216,6 +262,11 @@ public:
 			}
 		}
 		return cur;
+	}
+
+	friend std::ostream & operator << (std::ostream&stream, AVL_tree<T> & tree)
+	{
+		return tree.print_(std::cout);
 	}
 
 	unsigned int height(Node* node)
@@ -253,9 +304,9 @@ public:
 	{
 		return root_;
 	}
-	
+
 	size_t count()
 	{
-		return root_->count();
+		return root_->getCount();
 	}
 };
