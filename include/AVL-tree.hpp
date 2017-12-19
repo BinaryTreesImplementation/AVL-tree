@@ -2,19 +2,6 @@
 #include "Counter.hpp"
 
 
-class Counter
-{
-protected:
-	size_t& Count() { static size_t counter = 0; return counter; }
-
-public:
-	Counter() { ++Count(); }
-	~Counter() { --Count(); }
-
-
-
-};
-
 template<typename T>
 class AVL_tree
 {
