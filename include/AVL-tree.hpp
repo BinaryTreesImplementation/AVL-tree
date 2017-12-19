@@ -1,16 +1,5 @@
 #include<iostream>
-
-#ifndef Counter
-class Counter
-{
-protected:
-	size_t& Count() { static size_t counter = 0; return counter; }
-
-public:
-	Counter() { ++Count(); }
-	~Counter() { --Count(); }
-};
-#endif
+#include "Counter.hpp"
 
 template<typename T>
 class AVL_tree
